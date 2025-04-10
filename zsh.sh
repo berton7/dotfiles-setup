@@ -4,6 +4,13 @@ set -euo pipefail
 
 DOTFILES=$HOME/dotfiles
 
+if ! command -v zsh &> /dev/null
+then
+    sudo apt-get update
+    sudo apt-get upgrade
+    sudo apt-get install zsh
+fi
+
 [ ! -d $DOTFILES ] && git clone https://github.com/berton7/dotfiles $DOTFILES
 [ ! -d "$DOTFILES/zsh/.oh-my-zsh" ] && ZSH="$DOTFILES/zsh/.oh-my-zsh" sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 [ ! -d "$DOTFILES/zsh/.oh-my-zsh/custom/themes/powerlevel10k" ] && git clone https://github.com/romkatv/powerlevel10k.git "$DOTFILES/zsh/.oh-my-zsh/custom/themes/powerlevel10k" --depth 1
