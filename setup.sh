@@ -23,7 +23,24 @@ install_pkgs() {
     fi
 }
 
+install_fonts() {
+    
+    if ! fc-list | grep Meslo ; then
+        [ ! -d ~/.fonts ] && mkdir ~/.fonts
+        pushd ~/.fonts
+        wget https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf
+        wget https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf
+        wget https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf
+        wget https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
+
+        fc-cache -f
+        popd
+    fi
+}
+
 install_ohmyzsh() {
+    install_fonts
+
     [ ! -d $DOTFILES ] && git clone https://github.com/berton7/dotfiles $DOTFILES
     [ ! -d "$DOTFILES/zsh/.oh-my-zsh" ] && ZSH="$DOTFILES/zsh/.oh-my-zsh" sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
     [ ! -d "$DOTFILES/zsh/.oh-my-zsh/custom/themes/powerlevel10k" ] && git clone https://github.com/romkatv/powerlevel10k.git "$DOTFILES/zsh/.oh-my-zsh/custom/themes/powerlevel10k" --depth 1
@@ -39,7 +56,7 @@ configure_git() {
     ln -s "$DOTFILES/.gitconfig" "$HOME/.gitconfig"
 }
 
-check_pkgs zsh git
+check_pkgs zsh git wget
 install_pkgs
 install_ohmyzsh
 
